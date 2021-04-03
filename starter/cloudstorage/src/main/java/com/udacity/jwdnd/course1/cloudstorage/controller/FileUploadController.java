@@ -1,10 +1,11 @@
-package com.udacity.jwdnd.course1.cloudstorage.controller.db;
+package com.udacity.jwdnd.course1.cloudstorage.Controller;
 
-import com.udacity.jwdnd.course1.cloudstorage.model.User;
-import com.udacity.jwdnd.course1.cloudstorage.model.db.File;
-import com.udacity.jwdnd.course1.cloudstorage.model.form.StorageForm;
-import com.udacity.jwdnd.course1.cloudstorage.service.db.FileService;
-import com.udacity.jwdnd.course1.cloudstorage.service.db.UserService;
+import com.udacity.jwdnd.course1.cloudstorage.Model.File;
+import com.udacity.jwdnd.course1.cloudstorage.Model.StorageForm;
+import com.udacity.jwdnd.course1.cloudstorage.Model.User;
+import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
+import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -13,22 +14,21 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.naming.SizeLimitExceededException;
 import java.io.IOException;
 
+
 @Controller
-public class FileController {
+public class FileUploadController {
+
     private FileService fileService;
     private UserService userService;
 
-    public FileController(FileService fileService, UserService userService) {
+    public FileUploadController(FileService fileService, UserService userService) {
         this.fileService = fileService;
         this.userService = userService;
     }
@@ -42,8 +42,8 @@ public class FileController {
 
 
     @PostMapping("/file")
-    public ModelAndView uploadFile(@RequestParam("fileUpload") MultipartFile fileUpload, Authentication auth, StorageForm storageForm, ModelMap attributes) throws IOException {
-        User user = userService.getUserByUsername(auth.getName());
+    public ModelAndView uploadFile(@RequestParam("fileUpload") MultipartFile fileUpload, Authentication auth, StorageForm storageForm, ModelMap attributes) throws IOException, SizeLimitExceededException {
+        User user = userService.getUser(auth.getName());
         System.out.println("The size of the file uploading is: " + fileUpload.getSize());
         if (fileUpload.isEmpty()) {
             attributes.addAttribute("UploadErrorBool", true);
@@ -67,10 +67,10 @@ public class FileController {
 
     @GetMapping("/delete")
     public ModelAndView deleteFile(StorageForm storageForm, ModelMap attributes, Authentication auth) {
-        User user = userService.getUserByUsername(auth.getName());
+        User user = userService.getUser(auth.getName());
         for (File file : this.fileService.fileList(user.getUserId())) {
-            if (file.getFilename().equals(storageForm.getFileName())) {
-                this.fileService.removeFile(user.getUserId(), file.getFilename());
+            if (file.getFileName().equals(storageForm.getFileName())) {
+                this.fileService.removeFile(user.getUserId(), file.getFileName());
                 attributes.addAttribute("UploadSuccess", "Your file has been deleted succesfully");
             }
 
@@ -83,13 +83,19 @@ public class FileController {
     @GetMapping("/download")
     public ResponseEntity<ByteArrayResource> fileDownload(@RequestParam("fileName") String fileName, Authentication authentication) {
 
-        User user = userService.getUserByUsername(authentication.getName());
+        User user = userService.getUser(authentication.getName());
         File file = fileService.getFile(fileName, user.getUserId());
 
         return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(file.getContenttype()))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
-                .body(new ByteArrayResource(file.getFiledata()));
+                .contentType(MediaType.parseMediaType(file.getContentType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFileName() + "\"")
+                .body(new ByteArrayResource(file.getFileData()));
     }
 
+
 }
+
+
+
+
+

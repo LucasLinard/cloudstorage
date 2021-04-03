@@ -1,13 +1,14 @@
-package com.udacity.jwdnd.course1.cloudstorage.controller;
+package com.udacity.jwdnd.course1.cloudstorage.Controller;
 
-import com.udacity.jwdnd.course1.cloudstorage.model.User;
-import com.udacity.jwdnd.course1.cloudstorage.model.form.CredentialForm;
-import com.udacity.jwdnd.course1.cloudstorage.model.form.NoteForm;
-import com.udacity.jwdnd.course1.cloudstorage.model.form.StorageForm;
-import com.udacity.jwdnd.course1.cloudstorage.service.db.CredentialService;
-import com.udacity.jwdnd.course1.cloudstorage.service.db.FileService;
-import com.udacity.jwdnd.course1.cloudstorage.service.db.NoteService;
-import com.udacity.jwdnd.course1.cloudstorage.service.db.UserService;
+
+import com.udacity.jwdnd.course1.cloudstorage.Model.CredentialForm;
+import com.udacity.jwdnd.course1.cloudstorage.Model.NoteForm;
+import com.udacity.jwdnd.course1.cloudstorage.Model.StorageForm;
+import com.udacity.jwdnd.course1.cloudstorage.Model.User;
+import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
+import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
+import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
+import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -50,7 +51,7 @@ public class HomeController {
 
     @GetMapping()
     public String getHomePage(Authentication auth, Model model) {
-        User user = userService.getUserByUsername(auth.getName());
+        User user = userService.getUser(auth.getName());
         model.addAttribute("UploadedFiles", fileService.fileList(user.getUserId()));
         model.addAttribute("SavedNotes", noteService.getNotesList(user.getUserId()));
         model.addAttribute("SavedCredentials",credentialService.getCredentialList(user.getUserId()));
@@ -60,7 +61,7 @@ public class HomeController {
 
     @PostMapping
     public String postHomePage(Authentication auth, Model model) {
-        User user = userService.getUserByUsername(auth.getName());
+        User user = userService.getUser(auth.getName());
         model.addAttribute("UploadedFiles", fileService.fileList(user.getUserId()));
         model.addAttribute("SavedNotes", noteService.getNotesList(user.getUserId()));
         model.addAttribute("SavedCredentials",credentialService.getCredentialList(user.getUserId()));
@@ -75,4 +76,5 @@ public class HomeController {
         }
         return "redirect:/login?logout";
     }
+
 }

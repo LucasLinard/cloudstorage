@@ -1,4 +1,4 @@
-package com.udacity.jwdnd.course1.cloudstorage.pages;
+package com.udacity.jwdnd.course1.cloudstorage;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -32,4 +32,6 @@ public class LoginPage {
         inputPassword.sendKeys(pw);
         submitButton.submit();
     }
+
+
 }

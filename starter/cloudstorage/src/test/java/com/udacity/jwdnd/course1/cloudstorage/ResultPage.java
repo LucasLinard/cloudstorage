@@ -1,10 +1,11 @@
-package com.udacity.jwdnd.course1.cloudstorage.pages;
+package com.udacity.jwdnd.course1.cloudstorage;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.FindBy;
+
 
 public class ResultPage {
     private final WebDriver driver;
@@ -68,4 +69,5 @@ public class ResultPage {
     public String getNoteErrorSpan() {
         return noteErrorSpan.getText();
     }
+
 }

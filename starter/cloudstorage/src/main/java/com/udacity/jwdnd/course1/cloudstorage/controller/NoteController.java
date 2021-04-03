@@ -1,10 +1,10 @@
-package com.udacity.jwdnd.course1.cloudstorage.controller.db;
+package com.udacity.jwdnd.course1.cloudstorage.Controller;
 
-import com.udacity.jwdnd.course1.cloudstorage.model.User;
-import com.udacity.jwdnd.course1.cloudstorage.model.db.Note;
-import com.udacity.jwdnd.course1.cloudstorage.model.form.NoteForm;
-import com.udacity.jwdnd.course1.cloudstorage.service.db.NoteService;
-import com.udacity.jwdnd.course1.cloudstorage.service.db.UserService;
+import com.udacity.jwdnd.course1.cloudstorage.Model.Note;
+import com.udacity.jwdnd.course1.cloudstorage.Model.NoteForm;
+import com.udacity.jwdnd.course1.cloudstorage.Model.User;
+import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
+import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class NoteController {
+
     private NoteService noteService;
     private UserService userService;
 
@@ -34,7 +35,7 @@ public class NoteController {
 
     @PostMapping("/note")
     public ModelAndView addNote(NoteForm noteForm, Authentication auth, ModelMap attributes) {
-        User user = this.userService.getUserByUsername(auth.getName());
+        User user = this.userService.getUser(auth.getName());
         if (noteForm.getNoteId() == null) {
             if(this.noteService.addNote(noteForm, user.getUserId())==1) {
                 attributes.addAttribute("noteUploadSuccessBool", true);
@@ -56,7 +57,7 @@ public class NoteController {
 
     @GetMapping("/note-delete")
     public ModelAndView deleteNote(@ModelAttribute("noteForm") NoteForm noteForm, Authentication auth, ModelMap attributes) {
-        User user = this.userService.getUserByUsername(auth.getName());
+        User user = this.userService.getUser(auth.getName());
         for (Note note : this.noteService.getNotesList(user.getUserId())) {
             if (note.getNoteTitle().equals(noteForm.getNoteTitle())) {
                 if(this.noteService.deleteNote(note.getNoteTitle(), user.getUserId())==1){
@@ -82,4 +83,5 @@ public class NoteController {
     public String postResultPage() {
         return "result";
     }
+
 }

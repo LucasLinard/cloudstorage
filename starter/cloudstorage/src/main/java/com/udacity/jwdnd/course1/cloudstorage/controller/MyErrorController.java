@@ -1,4 +1,4 @@
-package com.udacity.jwdnd.course1.cloudstorage.controller;
+package com.udacity.jwdnd.course1.cloudstorage.Controller;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
@@ -9,7 +9,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-public class CustomErrorController implements ErrorController {
+public class MyErrorController implements ErrorController {
     @Override
     public String getErrorPath() {
         return "/error";

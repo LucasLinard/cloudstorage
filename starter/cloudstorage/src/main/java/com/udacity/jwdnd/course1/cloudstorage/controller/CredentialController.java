@@ -1,10 +1,10 @@
-package com.udacity.jwdnd.course1.cloudstorage.controller.db;
+package com.udacity.jwdnd.course1.cloudstorage.Controller;
 
-import com.udacity.jwdnd.course1.cloudstorage.model.form.CredentialForm;
-import com.udacity.jwdnd.course1.cloudstorage.model.User;
-import com.udacity.jwdnd.course1.cloudstorage.model.db.Credential;
-import com.udacity.jwdnd.course1.cloudstorage.service.db.CredentialService;
-import com.udacity.jwdnd.course1.cloudstorage.service.db.UserService;
+import com.udacity.jwdnd.course1.cloudstorage.Model.Credential;
+import com.udacity.jwdnd.course1.cloudstorage.Model.CredentialForm;
+import com.udacity.jwdnd.course1.cloudstorage.Model.User;
+import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
+import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @Controller
 public class CredentialController {
@@ -31,29 +33,29 @@ public class CredentialController {
     }
 
     @PostMapping("/credential")
-    public ModelAndView addCredential(@ModelAttribute("credentialForm") CredentialForm credentialForm, Authentication auth, ModelMap modelMap) {
+    public ModelAndView addCredential(@ModelAttribute("credentialForm") CredentialForm credentialForm, Authentication auth, ModelMap attributes) {
         String saveError = null;
-        User user = this.userService.getUserByUsername(auth.getName());
+        User user = this.userService.getUser(auth.getName());
         if (credentialForm.getCredentialId() == null) {
             if (this.credentialService.addCredential(credentialForm, user.getUserId()) == 1) {
-                modelMap.addAttribute("credoSuccessBool", true);
-                modelMap.addAttribute("credoSuccess", "Your credential has been saved successfully! ");
+                attributes.addAttribute("credoSuccessBool", true);
+                attributes.addAttribute("credoSuccess", "Your credential has been saved successfully! ");
             } else {
-                modelMap.addAttribute("credoErrorBool", true);
-                modelMap.addAttribute("credoError", "Something went wrong, please try again! ");
+                attributes.addAttribute("credoErrorBool", true);
+                attributes.addAttribute("credoError", "Something went wrong, please try again! ");
             }
         } else {
             this.credentialService.updateCredential(credentialForm);
-            modelMap.addAttribute("credoSuccessBool", true);
-            modelMap.addAttribute("credoSuccess", "Your credential has been saved successfully! ");
+            attributes.addAttribute("credoSuccessBool", true);
+            attributes.addAttribute("credoSuccess", "Your credential has been saved successfully! ");
         }
-        modelMap.addAttribute("SavedCredentials", this.credentialService.getCredentialList(user.getUserId()));
-        return new ModelAndView("forward:/result", modelMap);
+        attributes.addAttribute("SavedCredentials", this.credentialService.getCredentialList(user.getUserId()));
+        return new ModelAndView("forward:/result", attributes);
     }
 
     @GetMapping("/credential-delete")
     public ModelAndView deleteCredential(@ModelAttribute("credentialForm") CredentialForm credentialForm, Authentication auth, ModelMap attributes) {
-        User user = this.userService.getUserByUsername(auth.getName());
+        User user = this.userService.getUser(auth.getName());
         for (Credential credential : this.credentialService.getCredentialList(user.getUserId())) {
             if (credential.getUrl().equals(credentialForm.getUrl())) {
                 if (this.credentialService.deleteCredential(credential.getCredentialId(), user.getUserId()) == 1) {
