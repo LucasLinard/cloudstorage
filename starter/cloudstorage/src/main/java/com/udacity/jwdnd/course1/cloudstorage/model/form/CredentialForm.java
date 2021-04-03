@@ -1,36 +1,16 @@
-package com.udacity.jwdnd.course1.cloudstorage.model.db;
+package com.udacity.jwdnd.course1.cloudstorage.model.form;
 
-public class Credential {
+public class CredentialForm {
   private Integer credentialId;
   private String url;
-  private String username;
+  private String userName;
   private String key;
   private String password;
   private Integer userId;
 
-  @Override
-  public String toString() {
-    return "Credential{"
-        + "credentialId="
-        + credentialId
-        + ", url='"
-        + url
-        + '\''
-        + ", username='"
-        + username
-        + '\''
-        + ", key='"
-        + key
-        + '\''
-        + ", password='"
-        + password
-        + '\''
-        + ", userId="
-        + userId
-        + '}';
-  }
+  public CredentialForm() {}
 
-  public Integer getCredentialId() {
+    public Integer getCredentialId() {
     return credentialId;
   }
 
@@ -46,12 +26,12 @@ public class Credential {
     this.url = url;
   }
 
-  public String getUsername() {
-    return username;
+  public String getUserName() {
+    return userName;
   }
 
-  public void setUsername(String username) {
-    this.username = username;
+  public void setUserName(String userName) {
+    this.userName = userName;
   }
 
   public String getKey() {

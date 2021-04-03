@@ -1,7 +1,85 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller.db;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.User;
+import com.udacity.jwdnd.course1.cloudstorage.model.db.Note;
+import com.udacity.jwdnd.course1.cloudstorage.model.form.NoteForm;
+import com.udacity.jwdnd.course1.cloudstorage.service.db.NoteService;
+import com.udacity.jwdnd.course1.cloudstorage.service.db.UserService;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class NoteController {
+    private NoteService noteService;
+    private UserService userService;
+
+    public NoteController(NoteService noteService, UserService userService) {
+        this.noteService = noteService;
+        this.userService = userService;
+    }
+
+
+    @GetMapping("/note")
+    public String getNoteList(@ModelAttribute("noteForm") NoteForm noteForm, Model model) {
+        model.addAttribute("SavedNotes", noteService.getNotesList(noteForm.getUserId()));
+        return "home";
+    }
+
+
+    @PostMapping("/note")
+    public ModelAndView addNote(NoteForm noteForm, Authentication auth, ModelMap attributes) {
+        User user = this.userService.getUserByUsername(auth.getName());
+        if (noteForm.getNoteId() == null) {
+            if(this.noteService.addNote(noteForm, user.getUserId())==1) {
+                attributes.addAttribute("noteUploadSuccessBool", true);
+                attributes.addAttribute("noteUploadSuccess", "Your note has been saved successfully ! ");
+                attributes.addAttribute("SavedNotes", noteService.getNotesList(noteForm.getUserId()));
+            }else{
+                attributes.addAttribute("noteUploadErrorBool", true);
+                attributes.addAttribute("noteUploadError", "Something went wrong, please try again!");
+            }
+        } else{
+            this.noteService.updateNote(noteForm);
+            attributes.addAttribute("noteUploadSuccessBool", true);
+            attributes.addAttribute("noteUploadSuccess", "Your note has been saved successfully ! ");
+            attributes.addAttribute("SavedNotes", noteService.getNotesList(noteForm.getUserId()));
+
+        }
+        return new ModelAndView("forward:/result", attributes);
+    }
+
+    @GetMapping("/note-delete")
+    public ModelAndView deleteNote(@ModelAttribute("noteForm") NoteForm noteForm, Authentication auth, ModelMap attributes) {
+        User user = this.userService.getUserByUsername(auth.getName());
+        for (Note note : this.noteService.getNotesList(user.getUserId())) {
+            if (note.getNoteTitle().equals(noteForm.getNoteTitle())) {
+                if(this.noteService.deleteNote(note.getNoteTitle(), user.getUserId())==1){
+                    attributes.addAttribute("noteUploadSuccessBool",true);
+                    attributes.addAttribute("noteUploadSuccess","Your note has been deleted! ");
+                }else{
+                    attributes.addAttribute("noteUploadsErrorBool",true);
+                    attributes.addAttribute("noteUploadError","Something went wrong, please try again! ");
+                }
+
+            }
+        }
+        attributes.addAttribute("SavedNotes", noteService.getNotesList(noteForm.getUserId()));
+        return new ModelAndView("forward:/result", attributes);
+    }
+
+    @GetMapping("/result")
+    public String getResultPage() {
+        return "result";
+    }
+
+    @PostMapping("/result")
+    public String postResultPage() {
+        return "result";
+    }
 }

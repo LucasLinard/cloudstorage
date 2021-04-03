@@ -1,0 +1,24 @@
+package com.udacity.jwdnd.course1.cloudstorage.model.form;
+
+public class StorageForm {
+  private String fileName;
+  private Integer userId;
+
+  public StorageForm() {}
+
+    public String getFileName() {
+    return fileName;
+  }
+
+  public void setFileName(String fileName) {
+    this.fileName = fileName;
+  }
+
+  public Integer getUserId() {
+    return userId;
+  }
+
+  public void setUserId(Integer userId) {
+    this.userId = userId;
+  }
+}
