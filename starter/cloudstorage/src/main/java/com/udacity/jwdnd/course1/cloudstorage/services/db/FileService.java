@@ -1,14 +1,10 @@
-package com.udacity.jwdnd.course1.cloudstorage.services;
+package com.udacity.jwdnd.course1.cloudstorage.services.db;
 
 import com.udacity.jwdnd.course1.cloudstorage.Mapper.FileMapper;
-import com.udacity.jwdnd.course1.cloudstorage.Model.File;
-import com.udacity.jwdnd.course1.cloudstorage.Model.StorageForm;
+import com.udacity.jwdnd.course1.cloudstorage.Model.db.File;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 

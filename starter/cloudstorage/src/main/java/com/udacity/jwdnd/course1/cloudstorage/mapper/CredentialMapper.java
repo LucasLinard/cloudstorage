@@ -1,7 +1,12 @@
 package com.udacity.jwdnd.course1.cloudstorage.Mapper;
 
-import com.udacity.jwdnd.course1.cloudstorage.Model.Credential;
-import org.apache.ibatis.annotations.*;
+import com.udacity.jwdnd.course1.cloudstorage.Model.db.Credential;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 

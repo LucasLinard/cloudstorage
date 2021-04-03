@@ -1,9 +1,9 @@
-package com.udacity.jwdnd.course1.cloudstorage.Controller;
+package com.udacity.jwdnd.course1.cloudstorage.Controller.db;
 
-import com.udacity.jwdnd.course1.cloudstorage.Model.File;
+import com.udacity.jwdnd.course1.cloudstorage.Model.db.File;
 import com.udacity.jwdnd.course1.cloudstorage.Model.StorageForm;
 import com.udacity.jwdnd.course1.cloudstorage.Model.User;
-import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
+import com.udacity.jwdnd.course1.cloudstorage.services.db.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.core.io.ByteArrayResource;
@@ -14,8 +14,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 

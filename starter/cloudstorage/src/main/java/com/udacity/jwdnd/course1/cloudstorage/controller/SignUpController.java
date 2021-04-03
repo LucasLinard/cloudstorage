@@ -50,11 +50,4 @@ public class SignupController {
         }
 
     }
-  /*  @PostMapping("/signup")
-    public String signupUser(@ModelAttribute UserService userService, Model model, RedirectAttributes redirectAttributes) {
-        if (userCreated < 0) {
-            redirectAttributes.addFlashAttribute("SuccessMessage","Sign Up Successfully");
-            return "redirect:/login";
-        }
-    }*/
 }

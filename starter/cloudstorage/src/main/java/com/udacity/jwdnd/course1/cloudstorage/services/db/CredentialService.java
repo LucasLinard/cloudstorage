@@ -1,8 +1,9 @@
-package com.udacity.jwdnd.course1.cloudstorage.services;
+package com.udacity.jwdnd.course1.cloudstorage.services.db;
 
 import com.udacity.jwdnd.course1.cloudstorage.Mapper.CredentialMapper;
-import com.udacity.jwdnd.course1.cloudstorage.Model.Credential;
+import com.udacity.jwdnd.course1.cloudstorage.Model.db.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.Model.CredentialForm;
+import com.udacity.jwdnd.course1.cloudstorage.services.EncryptionService;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -27,13 +28,13 @@ public class CredentialService {
         String encodedKey= Base64.getEncoder().encodeToString(key);
         EncryptionService encryptionService= new EncryptionService();
         String encodedPassword=encryptionService.encryptValue(credoForm.getPassword(),encodedKey);
-        Credential credo = new Credential();
-        credo.setUrl(credoForm.getUrl());
-        credo.setUserName(credoForm.getUserName());
-        credo.setKey(encodedKey);
-        credo.setPassword(encodedPassword);
-        credo.setUserId(userId);
-        return this.credentialMapper.insert(credo);
+        Credential credential = new Credential();
+        credential.setUrl(credoForm.getUrl());
+        credential.setUserName(credoForm.getUserName());
+        credential.setKey(encodedKey);
+        credential.setPassword(encodedPassword);
+        credential.setUserId(userId);
+        return this.credentialMapper.insert(credential);
     }
 
     public void updateCredential(CredentialForm credoForm) {

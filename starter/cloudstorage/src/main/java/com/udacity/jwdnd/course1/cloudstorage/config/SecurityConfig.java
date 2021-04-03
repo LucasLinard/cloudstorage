@@ -11,37 +11,27 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private AuthenticationService authenticationService;
+  private final AuthenticationService authenticationService;
 
-    public SecurityConfig(AuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
-    }
+  public SecurityConfig(AuthenticationService authenticationService) {
+    this.authenticationService = authenticationService;
+  }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(this.authenticationService);
-    }
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth) {
+    auth.authenticationProvider(this.authenticationService);
+  }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/signup", "/error/","/css/**", "/js/**").permitAll()
-                .anyRequest().authenticated();
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.authorizeRequests()
+        .antMatchers("/signup", "/error/", "/css/**", "/js/**")
+        .permitAll()
+        .anyRequest()
+        .authenticated();
 
-        http.formLogin()
-                .loginPage("/login")
-                .permitAll();
+    http.formLogin().loginPage("/login").permitAll();
 
-        http.formLogin()
-                .defaultSuccessUrl("/home", true);
-        /*http.httpBasic()
-                .and()
-                .logout()
-                .permitAll()
-                .logoutUrl("/")
-                .logoutSuccessUrl("/login")*/
-        ;
-    }
-
-
+    http.formLogin().defaultSuccessUrl("/home", true);
+  }
 }
